@@ -83,19 +83,19 @@ const generateMockTransactions = (): Transaction[] => {
   const transactions: Transaction[] = [];
   const categories = {
     expense: ['Events', 'Equipment', 'Software', 'Venue', 'Miscellaneous'],
-    income: ['Membership', 'Sponsorship', 'Donations', 'Tournament Fees', 'Other']
+    income: ['Membership', 'Sponsorship', 'Donations', 'Activity Fees', 'Other']
   };
   
   const descriptions = {
-    'Events': ['Annual General Meeting', 'End of Year Party', 'Chess Workshop'],
-    'Equipment': ['Chess Boards Set', 'Digital Clocks', 'Notation Pads'],
-    'Software': ['Zoom Subscription', 'Website Hosting', 'Tournament Software License'],
-    'Venue': ['Hall Booking for May', 'Weekend Practice Venue', 'Tournament Hall'],
+    'Events': ['Annual General Meeting', 'End of Year Party', 'Leadership Seminar'],
+    'Equipment': ['Calculators & Office Supplies', 'Presentation Projector', 'Conference Notebooks'],
+    'Software': ['Zoom Subscription', 'Website Hosting', 'Accounting Software Subscription'],
+    'Venue': ['Hall Booking for May', 'Co-working Space Rental', 'Conference Hall Booking'],
     'Miscellaneous': ['Refreshments', 'Transport for team', 'Stationery'],
     'Membership': ['Annual Dues - John Doe', 'Annual Dues - Jane Smith', 'Student Membership'],
     'Sponsorship': ['Safaricom Bronze Sponsorship', 'Local Business Sponsor', 'Individual Patron'],
     'Donations': ['Anonymous Donation', 'Alumni Gift'],
-    'Tournament Fees': ['Nairobi Open Entry Fees', 'Rapid Chess Tournament Fees'],
+    'Activity Fees': ['Annual Seminar Entry Fees', 'Leadership Summit Tickets'],
     'Other': ['T-Shirt Sales', 'Fine Collections']
   };
 
