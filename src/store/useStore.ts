@@ -129,7 +129,7 @@ export const useStore = create<AppState>()(
       receipts: [],
       auditLog: [],
       settings: {
-        clubName: 'Nairobi Chess Club',
+        clubName: 'Kukisa Finance',
         currency: 'KES',
         theme: 'system',
         fyStartMonth: 1,

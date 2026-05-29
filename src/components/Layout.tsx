@@ -11,7 +11,8 @@ import {
   Settings as SettingsIcon,
   Menu,
   X,
-  Shield
+  Shield,
+  TrendingUp
 } from 'lucide-react';
 import { PolymorphicButton } from './ui/PolymorphicButton';
 import { PolymorphicCard } from './ui/PolymorphicCard';
@@ -53,9 +54,18 @@ export default function Layout() {
 
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between p-4 bg-white/60 dark:bg-card-dark/60 backdrop-blur-md border-b border-white/20 dark:border-white/10 absolute top-0 w-full z-20 h-[60px]">
-        <div className="flex items-center gap-2">
-          <Shield className="text-primary" size={24} />
-          <span className="text-[20px] font-medium text-text-primary dark:text-white">Club<strong className="text-primary font-bold">Vault</strong></span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-[32px] h-[32px] rounded-[10px] bg-[#3B82F6] flex items-center justify-center shadow-sm">
+            <TrendingUp className="text-white" size={16} />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[13px] font-bold text-text-primary dark:text-white tracking-[0.5px] leading-none uppercase">
+              KUKISA FINANCE
+            </span>
+            <span className="text-[9px] text-text-secondary dark:text-text-tertiary leading-none mt-0.5 font-medium">
+              School Club
+            </span>
+          </div>
         </div>
         <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 text-text-secondary">
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
@@ -73,11 +83,18 @@ export default function Layout() {
           mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
       >
-        <div className="p-6 hidden md:flex items-center gap-2">
-          <Shield className="text-primary" size={28} />
-          <span className="text-[20px] font-medium text-text-primary dark:text-white tracking-[-0.4px]">
-            Club<strong className="text-primary font-bold">Vault</strong>
-          </span>
+        <div className="p-5 hidden md:flex items-center gap-3">
+          <div className="w-[42px] h-[42px] rounded-[14px] bg-[#3B82F6] flex items-center justify-center shadow-md shadow-blue-500/10 flex-shrink-0">
+            <TrendingUp className="text-white" size={22} />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[15px] font-bold text-text-primary dark:text-white tracking-[0.5px] leading-tight uppercase">
+              KUKISA FINANCE
+            </span>
+            <span className="text-[11px] text-text-secondary dark:text-text-tertiary leading-tight font-medium">
+              School Club
+            </span>
+          </div>
         </div>
 
         {/* Mobile Spacer */}
