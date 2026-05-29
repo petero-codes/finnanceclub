@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+/* Glassmorphism Styles */
+/* Glassmorphism Styles (Flashy & Premium Refactor) */
+@keyframes sweep {
+  0% { transform: translateX(-105%) skewX(-20deg); }
+  100% { transform: translateX(200%) skewX(-20deg); }
+}
+
+.glass-panel, .mirror-effect {
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(18px) saturate(210%);
+  -webkit-backdrop-filter: blur(18px) saturate(210%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.dark .glass-panel, html.dark .mirror-effect {
+  background: rgba(10, 12, 22, 0.38);
+  backdrop-filter: blur(18px) saturate(210%);
+  -webkit-backdrop-filter: blur(18px) saturate(210%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+}
+
+.mirror-effect-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mirror-effect-hover:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 12px 35px 0 rgba(24, 95, 165, 0.08);
+}
+
+html.dark .mirror-effect-hover:hover {
+  background: rgba(15, 18, 32, 0.48);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.6), 0 0 20px rgba(24, 95, 165, 0.15);
+}
+
+.mirror-glow {
+  box-shadow: 0 0 25px rgba(24, 95, 165, 0.05);
+}
+
+html.dark .mirror-glow {
+  box-shadow: 0 0 35px rgba(0, 0, 0, 0.45), 0 0 20px rgba(24, 95, 165, 0.15);
+}
+
+.mirror-border {
+  position: relative;
+}
+
+.mirror-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.2px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(24, 95, 165, 0.15) 40%, rgba(255, 255, 255, 0.1) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: background 0.4s ease;
+  z-index: 1;
+}
+
+html.dark .mirror-border::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(24, 95, 165, 0.35) 40%, rgba(255, 255, 255, 0.03) 100%);
+}
+
+.mirror-border:hover::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(24, 95, 165, 0.5) 45%, rgba(255, 255, 255, 0.2) 100%);
+}
+
+.mirror-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.shiny-sweep {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.32) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-105%) skewX(-20deg);
+  pointer-events: none;
+  z-index: 2;
+}
+
+html.dark .shiny-sweep {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+.mirror-shine:hover .shiny-sweep,
+.group:hover .shiny-sweep {
+  animation: sweep 0.95s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.glass-btn {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.dark .glass-btn {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-btn:hover {
+  background: rgba(24, 95, 165, 0.08);
+  border-color: rgba(24, 95, 165, 0.3);
+  box-shadow: 0 0 12px rgba(24, 95, 165, 0.15);
+}
+
+html.dark .glass-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.05);
+}
+
+/* Animations for background glows */
+@keyframes float-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+@keyframes float-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-40px, 40px) scale(1.15); }
+}
+
+@keyframes float-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, -30px) scale(0.9); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+.animate-glow-1 {
+  animation: float-1 20s infinite alternate ease-in-out;
+}
+
+.animate-glow-2 {
+  animation: float-2 25s infinite alternate ease-in-out;
+}
+
+.animate-glow-3 {
+  animation: float-3 18s infinite alternate ease-in-out;
+}
+
+@layer base {
+  body {
+    @apply font-sans bg-page-light text-text-primary antialiased;
+  }
+  
+  html.dark body {
+    @apply bg-page-dark text-white; /* Using white for primary text in dark mode for better contrast, though the spec says #111827 for text-primary which is dark */
+  }
+
+  html.dark .text-primary {
+    color: #F9FAFB; /* Override text-primary for dark mode */
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-[12px] p-[18px] sm:p-[20px] shadow-none;
+  }
+
+  .stat-card {
+    @apply bg-card-light dark:bg-card-dark border-[0.5px] border-border-light dark:border-border-dark rounded-[12px] p-[18px] sm:p-[20px] shadow-none flex flex-col gap-1;
+  }
+
+  .btn-primary {
+    @apply h-[32px] px-[12px] rounded-[8px] bg-primary text-white font-medium text-[14px] flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors;
+  }
+
+  .btn-secondary {
+    @apply h-[32px] px-[12px] rounded-[8px] bg-transparent border-[0.5px] border-border-light dark:border-border-dark text-text-primary dark:text-white font-medium text-[14px] flex items-center justify-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors;
+  }
+
+  .pill-income {
+    @apply bg-[#E1F5EE] text-[#0F6E56] rounded-[20px] px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.05em] inline-flex items-center;
+  }
+
+  .pill-expense {
+    @apply bg-[#FAECE7] text-[#993C1D] rounded-[20px] px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.05em] inline-flex items-center;
+  }
+
+  .pill-category {
+    @apply bg-[#E6F1FB] text-primary rounded-[20px] px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.05em] inline-flex items-center;
+  }
+
+  .page-title {
+    @apply text-[20px] font-medium tracking-[-0.4px] text-text-primary dark:text-white;
+  }
+
+  .card-title {
+    @apply text-[13px] font-medium text-text-primary dark:text-white;
+  }
+
+  .stat-number {
+    @apply text-[26px] sm:text-[30px] font-medium tracking-[-0.8px];
+  }
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  body {
+    background-color: white !important;
+  }
+  .card {
+    border: 1px solid #ccc !important;
+    break-inside: avoid;
+  }
+}
+
+/* Sleek dynamic background glass grid pattern */
+.glass-grid {
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, rgba(24, 95, 165, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(24, 95, 165, 0.04) 1px, transparent 1px);
+}
+
+html.dark .glass-grid {
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}

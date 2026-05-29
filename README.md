@@ -1,220 +1,102 @@
-# AI-Powered Code Review Assistant
+# ClubVault 🪙
 
-A full-stack application that provides AI-powered code reviews using Claude. Features a VS Code-styled interface with Monaco editor, real-time feedback, and review history.
+**ClubVault** is a secure, state-of-the-art financial ledger and dashboard application designed specifically for clubs, societies, and small community groups. It provides treasurers and members with a premium, transparent, and beautiful interface to manage finances, track transactions, upload digital receipts, and maintain meeting notes with military-grade local security.
 
-## Features
+Designed with a sleek **Glassmorphism UI/UX**, it supports **Dark Mode**, **Light Mode**, and matches system preferences seamlessly.
 
-- **Monaco Editor** — Full-featured code editor with syntax highlighting for 12+ languages
-- **AI Reviews** — Instant feedback on bugs, optimizations, standards violations, and positives
-- **Review History** — Persistent storage of all past reviews with detail view
-- **VS Code Theme** — Dark UI inspired by Visual Studio Code
-- **Responsive** — Split-pane layout with collapsible sections
-- **Docker Ready** — One-command deployment with docker-compose
+---
+
+## Key Features
+
+### 🛡️ Local Vault Security
+- **PIN-Protected Entry**: Restrict unauthorized local access to sensitive financial records with a 4-digit passcode check on startup and refresh.
+- **Inactivity Auto-Lock**: Automatically lock the vault after a configurable period of inactive user interaction (1, 5, 10, or 30 minutes).
+- **Brute-Force Protection**: Enforces rate-limiting on entry attempts, temporarily locking access for 5 minutes after 3 consecutive failed PIN attempts.
+
+### 📊 Cash Flow & Financial Analytics
+- **Dynamic Dashboard**: Monitor total balance, Year-to-Date (YTD) income/expense summaries, recent actions, and key growth indicators at a glance.
+- **Interactive Recharts**: 
+  - *Expenses by Category*: Donut charts highlighting percentage breakdown of spends.
+  - *Monthly Cash Flow*: Side-by-side bar charts illustrating Monthly Income vs. Expenses.
+  - *Weekly Cash Trend*: Beautiful glowing Area Charts showing the rolling balance over the last 4 weeks.
+
+### 📝 Treasurer Tools
+- **Transaction Manager**: Full CRUD support for adding, editing, and deleting transactions with details like description, amount, date, and category.
+- **Digital Receipts**: Drag-and-drop or file upload support for physical receipts, converting them to compressed Base64 Data URLs stored securely in your browser's LocalStorage.
+- **Autosaved Meeting Notes**: Real-time rich text notebook for recording financial annotations or meeting minutes. **Safely autosaves even if you navigate pages mid-typing.**
+- **Automatic Audit Trail**: Tracks and logs all modifications (added transactions, edits, deletions, settings adjustments) chronologically to ensure governance and fraud prevention.
+
+---
 
 ## Tech Stack
 
-**Frontend**
-- React 19 + Vite
-- Monaco Editor (@monaco-editor/react)
-- React Router v7
-- Tailwind CSS v3 (custom VS Code theme)
-- Framer Motion (animations)
-- Lucide React (icons)
+- **Framework**: [React 19](https://react.dev/) + [Vite](https://vitejs.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) (modern variables-based configuration)
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand) with local storage state persistence
+- **Charts**: [Recharts v3](https://recharts.org/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Date Formatting**: [date-fns](https://date-fns.org/)
 
-**Backend**
-- FastAPI (Python 3.11)
-- SQLAlchemy + PostgreSQL
-- Pydantic v2
-- Mock AI reviewer (ready for Anthropic Claude integration)
-
-**DevOps**
-- Docker & Docker Compose
-- PostgreSQL 15
-- ESLint + strict config
+---
 
 ## Quick Start
 
-### Prerequisites
-- Docker & Docker Compose (recommended)
-- OR: Python 3.11+, Node.js 18+, PostgreSQL (for local)
+### 1. Prerequisites
+Make sure you have [Node.js](https://nodejs.org/) (v18+) and [npm](https://www.npmjs.com/) installed.
 
-### Option 1: Docker Compose (Easiest)
+### 2. Installation
+Clone the repository and install dependencies:
 
 ```bash
-# Clone and start everything
-git clone https://github.com/petero-codes/AI-Powered-Code-Review-Assistant.git
-cd AI-Powered-Code-Review-Assistant
-
-# Create environment file
-cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY (optional for now)
-
-# Start all services
-docker-compose up
-```
-
-App runs at: http://localhost:3000
-
-### Option 2: Local Development
-
-**1. Backend**
-```bash
-cd backend
-
-# Create virtual environment
-python -m venv venv
-# On Windows:
-venv\Scripts\Activate.ps1
-# On Mac/Linux:
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Setup database (PostgreSQL or SQLite fallback)
-# For PostgreSQL:
-#   - Ensure DATABASE_URL is set in .env (postgresql://user:pass@localhost:5432/codereview)
-# For SQLite (dev only):
-#   - No action needed; uses ./sql_app.db
-
-# Start server
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
-
-**2. Frontend**
-```bash
-cd frontend
-
-# Install dependencies
+git clone https://github.com/petero-codes/finnanceclub.git
+cd finnanceclub
 npm install
-
-# Start dev server
-npm run dev -- --host 0.0.0.0 --port 3000
 ```
 
-App runs at: http://localhost:3000
-
-## Environment Variables
-
-Copy `.env.example` to `.env` and configure:
-
-```env
-# Database
-DATABASE_URL=postgresql://admin:password@localhost:5432/codereview
-# OR omit for SQLite (development only)
-
-# Backend
-POSTGRES_USER=admin
-POSTGRES_PASSWORD=password
-POSTGRES_DB=codereview
-
-# Frontend
-VITE_API_URL=http://localhost:8000
-
-# AI (optional - currently uses mock data)
-GITHUB_CLIENT_ID=
-GITHUB_CLIENT_SECRET=
-ANTHROPIC_API_KEY=sk-ant-...
-```
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/review` | Submit code for review |
-| GET | `/api/history` | List all past reviews |
-| GET | `/api/review/{id}` | Get specific review |
-| DELETE | `/api/review/{id}` | Delete a review |
-
-### Example Request
+### 3. Run Development Server
+Start the local server to run the application:
 
 ```bash
-curl -X POST http://localhost:8000/api/review \
-  -H "Content-Type: application/json" \
-  -d '{"code":"console.log(\"hello\");","language":"javascript"}'
+npm run dev
 ```
 
-## Project Structure
+The application will launch locally at: **[http://localhost:5173](http://localhost:5173)**
 
-```
-├── backend/
-│   ├── main.py              # FastAPI app & routes
-│   ├── database.py          # DB connection
-│   ├── models.py            # SQLAlchemy models
-│   ├── schemas.py           # Pydantic schemas
-│   ├── services/
-│   │   └── ai_reviewer.py   # Mock AI (ready for Claude)
-│   ├── requirements.txt
-│   └── Dockerfile
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── editor/      # Monaco editor wrapper
-│   │   │   ├── layout/      # Sidebar & main layout
-│   │   │   └── review/      # Review panel
-│   │   ├── pages/           # Home, History, Settings
-│   │   └── services/        # API client
-│   ├── tailwind.config.js   # VS Code theme colors
-│   └── Dockerfile
-├── docker-compose.yml
-├── .env.example
-└── .gitignore
-```
+### 4. Build Production Bundle
+To build the optimized production assets:
 
-## Adding Real AI (Claude)
-
-The backend accepts `x-api-key` header (or falls back to `ANTHROPIC_API_KEY` env var). To enable real Claude reviews:
-
-1. Get key from [console.anthropic.com](https://console.anthropic.com)
-2. Add to `.env`: `ANTHROPIC_API_KEY=sk-ant-...`
-3. Modify `backend/services/ai_reviewer.py` to call Anthropic API when key is present
-
-Example integration point in `analyze_code()`:
-
-```python
-import anthropic
-
-async def analyze_code(code: str, language: str, api_key: str = None) -> dict:
-    if api_key:
-        client = anthropic.AsyncAnthropic(api_key=api_key)
-        # Call Claude and parse response
-        ...
-    # Fallback to mock
-    return mock_response()
-```
-
-## Development
-
-### Linting
 ```bash
-# Frontend
-cd frontend && npm run lint
-
-# Backend (install ruff or flake8 first)
-cd backend && flake8 .
+npm run build
+npm run preview
 ```
 
-### Build
-```bash
-cd frontend && npm run build  # Outputs to frontend/dist/
+---
+
+## Architecture & Data Flow
+
+```mermaid
+graph TD
+    A[Browser / User Interaction] -->|Zustand Store Actions| B(Zustand State Manager)
+    B -->|State Persist Middleware| C[(Local Storage: 'clubvault-storage')]
+    B -->|Automatic Audit Logs| D[Audit Trail Ledger]
+    A -->|Auto-Lock Events Listener| E[Security Guard]
+    E -->|Timeout Expiry| F[Session Invalidation]
+    F -->|Renders overlay| G[PIN Lock Screen]
 ```
 
-### Database Migrations (Future)
+### Data Persistence
+To respect user privacy and avoid costly database infrastructure, **ClubVault** runs **100% locally and serverless**. 
+- All transactions, receipts, audit trails, and settings are serialized into a single persisted key in the browser's storage (`clubvault-storage`).
+- **Data Portability**: Users can export their entire database state to a single `.json` file via the settings page, and import backups to restore states on separate devices.
 
-If using Alembic:
-```bash
-cd backend
-alembic revision --autogenerate -m "description"
-alembic upgrade head
-```
+---
 
-## Notes
+## Security Best Practices Observed
+1. **Zero Server Footprint**: No financial data ever leaves the user's browser, preventing server leaks and cloud database hacking.
+2. **HTML Sanitization**: All user-provided text inputs (Notes, Descriptions, Club Names) are automatically sanitized on submission to block Cross-Site Scripting (XSS) injection attacks.
+3. **Privacy-Preserving Commits**: Git email configurations utilize GitHub's secure, anonymized `noreply` routing, shielding the developer's personal email address from public scraping.
 
-- **SQLite** is used by default if `DATABASE_URL` is not set (for quick dev setup)
-- **PostgreSQL** recommended for production (configured in docker-compose.yml)
-- **Mock AI** returns realistic sample data; no API key required for development
-- All secrets are gitignored; use `.env.example` as template
+---
 
 ## License
-
-MIT
+Licensed under the [MIT License](LICENSE).
