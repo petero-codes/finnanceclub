@@ -238,7 +238,7 @@ export default function Transactions() {
                 <select className="w-full px-3 py-2 bg-white/20 dark:bg-card-dark/20 border border-white/25 dark:border-white/10 rounded-[8px] text-[14px] text-text-primary dark:text-white focus:outline-none focus:border-primary" value={cat} onChange={e => setCat(e.target.value)}>
                   {type === 'expense' 
                     ? ['Dues', 'Events', 'Equipment', 'Software', 'Venue', 'Miscellaneous'].map(c => <option key={c} value={c}>{c}</option>)
-                    : ['Membership', 'Sponsorship', 'Donations', 'Tournament Fees', 'Other'].map(c => <option key={c} value={c}>{c}</option>)
+                    : ['Membership', 'Sponsorship', 'Donations', 'Activity Fees', 'Other'].map(c => <option key={c} value={c}>{c}</option>)
                   }
                 </select>
               </div>
