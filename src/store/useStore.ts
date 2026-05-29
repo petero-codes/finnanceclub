@@ -21,6 +21,14 @@ export interface Receipt {
   linkedTransactionId?: string;
 }
 
+export interface User {
+  id: string;
+  name: string;
+  role: string;
+  accessLevel: 'full' | 'view_only';
+  pin: string;
+}
+
 export interface AuditEntry {
   id: string;
   action: string;
@@ -48,6 +56,11 @@ export interface AppState {
   notes: string;
   notesSavedAt: string | null;
   sessionToken: string | null;
+  
+  // User Management
+  users: User[];
+  currentUser: User | null;
+  registerUser: (name: string, role: string, accessLevel: 'full' | 'view_only', pin: string) => void;
   
   // Actions
   addTransaction: (t: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>) => void;
@@ -142,6 +155,43 @@ export const useStore = create<AppState>()(
       notes: '',
       notesSavedAt: null,
       sessionToken: null,
+      users: [
+        {
+          id: 'admin-default',
+          name: 'BRIAN treasurer',
+          role: 'treasurer',
+          accessLevel: 'full',
+          pin: '10102323',
+        }
+      ],
+      currentUser: null,
+
+      registerUser: (name, role, accessLevel, pin) => set((state) => {
+        const newUser: User = {
+          id: crypto.randomUUID(),
+          name,
+          role,
+          accessLevel,
+          pin
+        };
+        const newLog: AuditEntry = {
+          id: crypto.randomUUID(),
+          action: 'user_registered',
+          details: `Registered new user: ${name} (${role})`,
+          timestamp: new Date().toISOString()
+        };
+        return {
+          users: [...state.users, newUser],
+          currentUser: newUser,
+          sessionToken: crypto.randomUUID(),
+          auditLog: [newLog, ...state.auditLog],
+          settings: {
+            ...state.settings,
+            failedAttempts: 0,
+            lockoutUntil: null
+          }
+        };
+      }),
 
       addTransaction: (t) => set((state) => {
         const sanitizedDesc = t.description.replace(/<\/?[^>]+(>|$)/g, "");
@@ -328,10 +378,14 @@ export const useStore = create<AppState>()(
           }
         }
 
-        if (state.settings.pin === pin) {
+        // Search for user in registered accounts
+        const user = state.users.find(u => u.pin === pin);
+        
+        if (user) {
           const token = crypto.randomUUID();
           set((state) => ({
             sessionToken: token,
+            currentUser: user,
             settings: { 
               ...state.settings, 
               failedAttempts: 0, 
@@ -363,7 +417,8 @@ export const useStore = create<AppState>()(
       },
 
       lockVault: () => set(() => ({
-        sessionToken: null
+        sessionToken: null,
+        currentUser: null
       })),
 
       refreshSession: () => {

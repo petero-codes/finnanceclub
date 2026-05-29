@@ -9,9 +9,7 @@ import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import Analytics from './pages/Analytics';
 import Reports from './pages/Reports';
-import Receipts from './pages/Receipts';
-import Notes from './pages/Notes';
-import AuditTrail from './pages/AuditTrail';
+import Accountability from './pages/Accountability';
 import Settings from './pages/Settings';
 
 export default function App() {
@@ -70,9 +68,7 @@ export default function App() {
           <Route path="transactions" element={<Transactions />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="reports" element={<Reports />} />
-          <Route path="receipts" element={<Receipts />} />
-          <Route path="notes" element={<Notes />} />
-          <Route path="audit" element={<AuditTrail />} />
+          <Route path="accountability" element={<Accountability />} />
           <Route path="settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Route>

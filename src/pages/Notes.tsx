@@ -4,9 +4,10 @@ import { format } from 'date-fns';
 import { Save } from 'lucide-react';
 
 export default function Notes() {
-  const { notes, notesSavedAt, saveNotes } = useStore();
+  const { notes, notesSavedAt, saveNotes, currentUser } = useStore();
   const [localNotes, setLocalNotes] = useState(notes);
   const [isSaving, setIsSaving] = useState(false);
+  const isViewOnly = currentUser?.accessLevel === 'view_only';
 
   // Use refs to keep the latest values accessible in the unmount cleanup effect
   const localNotesRef = useRef(localNotes);
@@ -23,6 +24,7 @@ export default function Notes() {
 
   // Handle manual saving or autosave on blur
   const triggerSave = (textToSave: string) => {
+    if (isViewOnly) return;
     if (textToSave !== originalNotesRef.current) {
       setIsSaving(true);
       saveNotes(textToSave);
@@ -37,25 +39,23 @@ export default function Notes() {
   // Autosave on component unmount (when clicking other router links)
   useEffect(() => {
     return () => {
+      if (isViewOnly) return;
       if (localNotesRef.current !== originalNotesRef.current) {
         saveNotes(localNotesRef.current);
       }
     };
-  }, [saveNotes]);
+  }, [saveNotes, isViewOnly]);
 
   return (
-    <div className="flex flex-col gap-6 animate-fade-in h-full">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="page-title">Treasurer Notes</h1>
-      </div>
-
+    <div className="flex flex-col gap-4 animate-fade-in h-full">
       <div className="card flex flex-col flex-1 min-h-[400px]">
         <textarea
           className="w-full flex-1 bg-transparent border-none resize-none outline-none text-[14px] text-text-primary dark:text-white leading-relaxed"
-          placeholder="Jot down important notes, reminders, or context for upcoming committee meetings..."
+          placeholder={isViewOnly ? "No notes recorded." : "Jot down important notes, reminders, or context for upcoming committee meetings..."}
           value={localNotes}
           onChange={(e) => setLocalNotes(e.target.value)}
           onBlur={handleBlur}
+          readOnly={isViewOnly}
         ></textarea>
         
         <div className="border-t border-border-light dark:border-border-dark mt-4 pt-4 flex justify-between items-center text-[12px] text-text-tertiary">

@@ -4,21 +4,24 @@ import { format } from 'date-fns';
 import { UploadCloud, File, Trash2 } from 'lucide-react';
 
 export default function Receipts() {
-  const { receipts, addReceipt, deleteReceipt } = useStore();
+  const { receipts, addReceipt, deleteReceipt, currentUser } = useStore();
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isViewOnly = currentUser?.accessLevel === 'view_only';
 
   const handleDragOver = (e: React.DragEvent) => {
+    if (isViewOnly) return;
     e.preventDefault();
     setIsDragging(true);
   };
 
   const handleDragLeave = () => {
+    if (isViewOnly) return;
     setIsDragging(false);
   };
 
   const processFile = (file: File) => {
-    if (!file) return;
+    if (isViewOnly || !file) return;
     const reader = new FileReader();
     reader.onload = (e) => {
       addReceipt({
@@ -30,6 +33,7 @@ export default function Receipts() {
   };
 
   const handleDrop = (e: React.DragEvent) => {
+    if (isViewOnly) return;
     e.preventDefault();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
@@ -38,36 +42,35 @@ export default function Receipts() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isViewOnly) return;
     if (e.target.files && e.target.files.length > 0) {
       processFile(e.target.files[0]);
     }
   };
 
   return (
-    <div className="flex flex-col gap-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="page-title">Receipts</h1>
-      </div>
-
-      <div 
-        className={`card border-dashed border-2 flex flex-col items-center justify-center py-12 transition-colors cursor-pointer ${isDragging ? 'border-primary bg-[#E6F1FB]' : 'border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-800'}`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={() => fileInputRef.current?.click()}
-      >
-        <UploadCloud size={48} className="text-primary mb-4" />
-        <h3 className="text-[16px] font-medium text-text-primary dark:text-white mb-1">Drag and drop receipts here</h3>
-        <p className="text-[13px] text-text-secondary mb-4">Accepts JPG, PNG, PDF</p>
-        <button className="btn-secondary pointer-events-none">Browse files</button>
-        <input 
-          type="file" 
-          ref={fileInputRef} 
-          onChange={handleFileChange} 
-          accept=".jpg,.jpeg,.png,.pdf" 
-          className="hidden" 
-        />
-      </div>
+    <div className="flex flex-col gap-4 animate-fade-in">
+      {!isViewOnly && (
+        <div 
+          className={`card border-dashed border-2 flex flex-col items-center justify-center py-12 transition-colors cursor-pointer ${isDragging ? 'border-primary bg-[#E6F1FB]' : 'border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-800'}`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <UploadCloud size={48} className="text-primary mb-4" />
+          <h3 className="text-[16px] font-medium text-text-primary dark:text-white mb-1">Drag and drop receipts here</h3>
+          <p className="text-[13px] text-text-secondary mb-4">Accepts JPG, PNG, PDF</p>
+          <button className="btn-secondary pointer-events-none">Browse files</button>
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            onChange={handleFileChange} 
+            accept=".jpg,.jpeg,.png,.pdf" 
+            className="hidden" 
+          />
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {receipts.map((r) => (
@@ -80,11 +83,13 @@ export default function Receipts() {
                   <File size={40} className="text-text-tertiary" />
                 </div>
               )}
-              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <button onClick={() => deleteReceipt(r.id)} className="bg-expense text-white p-2 rounded-full hover:bg-expense/80">
-                  <Trash2 size={18} />
-                </button>
-              </div>
+              {!isViewOnly && (
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <button onClick={() => deleteReceipt(r.id)} className="bg-expense text-white p-2 rounded-full hover:bg-expense/80">
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              )}
             </div>
             <div className="p-3">
               <div className="text-[13px] font-medium text-text-primary dark:text-white truncate" title={r.filename}>

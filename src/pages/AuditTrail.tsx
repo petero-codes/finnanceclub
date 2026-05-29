@@ -4,30 +4,28 @@ import { format } from 'date-fns';
 import { History, Filter } from 'lucide-react';
 
 export default function AuditTrail() {
-  const { auditLog } = useStore();
+  const { auditLog, currentUser } = useStore();
   const [filterAction, setFilterAction] = useState('all');
 
   const filteredLogs = auditLog.filter(log => filterAction === 'all' || log.action.includes(filterAction));
 
   return (
-    <div className="flex flex-col gap-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="page-title">Audit Trail</h1>
-        <div className="flex items-center gap-2">
-          <select 
-            className="px-3 py-1.5 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-[8px] text-[14px] text-text-primary dark:text-white focus:outline-none"
-            value={filterAction}
-            onChange={(e) => setFilterAction(e.target.value)}
-          >
-            <option value="all">All Actions</option>
-            <option value="transaction">Transactions</option>
-            <option value="receipt">Receipts</option>
-            <option value="settings">Settings</option>
-          </select>
-          <button className="btn-secondary">
-            <Filter size={16} /> Filter
-          </button>
-        </div>
+    <div className="flex flex-col gap-4 animate-fade-in">
+      <div className="flex justify-end gap-2 mb-2">
+        <select 
+          className="px-3 py-1.5 bg-white/20 dark:bg-card-dark/20 border border-white/25 dark:border-white/10 rounded-[8px] text-[14px] text-text-primary dark:text-white focus:outline-none"
+          value={filterAction}
+          onChange={(e) => setFilterAction(e.target.value)}
+        >
+          <option value="all">All Actions</option>
+          <option value="transaction">Transactions</option>
+          <option value="receipt">Receipts</option>
+          <option value="settings">Settings</option>
+          <option value="user">Users</option>
+        </select>
+        <button className="btn-secondary">
+          <Filter size={16} /> Filter
+        </button>
       </div>
 
       <div className="card overflow-x-auto">
@@ -46,8 +44,8 @@ export default function AuditTrail() {
                 <td className="py-3 text-text-secondary whitespace-nowrap">
                   {format(new Date(log.timestamp), 'MMM dd, yyyy HH:mm:ss')}
                 </td>
-                <td className="py-3 text-text-primary dark:text-white">
-                  Local User
+                <td className="py-3 text-text-primary dark:text-white font-medium">
+                  {currentUser?.name || 'BRIAN treasurer'}
                 </td>
                 <td className="py-3">
                   <span className="pill-category">{log.action.replace('_', ' ')}</span>

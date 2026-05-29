@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
+import { useStore } from '../store/useStore';
 import { 
   LayoutDashboard, 
   ArrowRightLeft, 
@@ -12,7 +13,9 @@ import {
   Menu,
   X,
   Shield,
-  TrendingUp
+  TrendingUp,
+  ShieldCheck,
+  LogOut
 } from 'lucide-react';
 import { PolymorphicButton } from './ui/PolymorphicButton';
 import { PolymorphicCard } from './ui/PolymorphicCard';
@@ -37,6 +40,7 @@ const NavItem = ({ to, icon: Icon, label, onClick }: { to: string, icon: any, la
 };
 
 export default function Layout() {
+  const { settings, currentUser, lockVault } = useStore();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const closeMobileMenu = () => setMobileOpen(false);
@@ -113,18 +117,40 @@ export default function Layout() {
           </div>
 
           <div>
-            <div className="text-[11px] font-medium uppercase tracking-[0.05em] text-text-tertiary mb-3 px-3">Tools</div>
+            <div className="text-[11px] font-medium uppercase tracking-[0.05em] text-text-tertiary mb-3 px-3">Governance</div>
             <nav className="flex flex-col gap-1">
-              <NavItem to="/receipts" icon={Receipt} label="Receipts" onClick={closeMobileMenu} />
-              <NavItem to="/notes" icon={FileText} label="Treasurer Notes" onClick={closeMobileMenu} />
-              <NavItem to="/audit" icon={History} label="Audit Trail" onClick={closeMobileMenu} />
+              <NavItem to="/accountability" icon={ShieldCheck} label="Accountability" onClick={closeMobileMenu} />
             </nav>
           </div>
 
         </div>
 
-        <div className="p-4 border-t border-white/20 dark:border-white/10">
+        <div className="p-4 border-t border-white/20 dark:border-white/10 flex flex-col gap-3">
           <NavItem to="/settings" icon={SettingsIcon} label="Settings" onClick={closeMobileMenu} />
+          
+          {/* Dynamic Profile Indicator */}
+          <div className="flex items-center justify-between p-2 rounded-[8px] bg-white/15 dark:bg-white/5 border border-white/10 dark:border-white/5 mt-1 animate-fade-in">
+            <div className="flex items-center gap-2 overflow-hidden">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-[14px] flex-shrink-0 select-none shadow-sm shadow-primary/20">
+                {(currentUser?.name || 'B').charAt(0).toUpperCase()}
+              </div>
+              <div className="flex flex-col overflow-hidden text-left">
+                <span className="text-[12px] font-bold text-text-primary dark:text-white truncate max-w-[105px] leading-tight">
+                  {currentUser?.name || 'BRIAN treasurer'}
+                </span>
+                <span className="text-[10px] text-text-tertiary dark:text-text-tertiary leading-tight truncate">
+                  {currentUser?.accessLevel === 'view_only' ? 'View Only' : 'Full Access'}
+                </span>
+              </div>
+            </div>
+            <button 
+              onClick={() => lockVault()}
+              className="p-1 text-text-secondary hover:text-expense hover:bg-white/20 dark:hover:bg-white/10 rounded-[6px] transition-colors cursor-pointer"
+              title="Lock Vault"
+            >
+              <LogOut size={14} />
+            </button>
+          </div>
         </div>
       </aside>
 

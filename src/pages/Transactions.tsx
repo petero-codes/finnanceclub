@@ -10,11 +10,12 @@ const formatCurrency = (amount: number, currency: string) =>
   new Intl.NumberFormat('en-KE', { style: 'currency', currency }).format(amount);
 
 export default function Transactions() {
-  const { transactions, settings, addTransaction, updateTransaction, deleteTransaction } = useStore();
+  const { transactions, settings, addTransaction, updateTransaction, deleteTransaction, currentUser } = useStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+  const isViewOnly = currentUser?.accessLevel === 'view_only';
   
   // Modal State
   const [desc, setDesc] = useState('');
@@ -99,9 +100,11 @@ export default function Transactions() {
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="page-title">Transactions</h1>
-        <PolymorphicButton variant="primary" onClick={() => setIsModalOpen(true)}>
-          <Plus size={16} /> Add Transaction
-        </PolymorphicButton>
+        {!isViewOnly && (
+          <PolymorphicButton variant="primary" onClick={() => setIsModalOpen(true)}>
+            <Plus size={16} /> Add Transaction
+          </PolymorphicButton>
+        )}
       </div>
 
       {/* Controls Bar */}
@@ -142,7 +145,7 @@ export default function Transactions() {
               <th className="pb-3 font-medium">Type</th>
               <th className="pb-3 font-medium">Date</th>
               <th className="pb-3 font-medium text-right">Amount</th>
-              <th className="pb-3 font-medium text-right">Actions</th>
+              {!isViewOnly && <th className="pb-3 font-medium text-right">Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -166,24 +169,26 @@ export default function Transactions() {
                 <td className={`py-3 text-right font-medium ${t.type === 'income' ? 'text-income' : 'text-text-primary dark:text-white'}`}>
                   {t.type === 'income' ? '+' : '-'}{formatCurrency(t.amount, settings.currency)}
                 </td>
-                <td className="py-3">
-                  <div className="flex items-center justify-end gap-2">
-                    <button onClick={() => startEdit(t)} className="p-1.5 text-text-secondary hover:text-primary transition-colors" title="Edit Transaction">
-                      <Edit2 size={14} />
-                    </button>
-                    <button onClick={() => handleDelete(t.id)} className="p-1.5 text-text-secondary hover:text-expense transition-colors" title="Delete Transaction">
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                </td>
+                {!isViewOnly && (
+                  <td className="py-3">
+                    <div className="flex items-center justify-end gap-2">
+                      <button onClick={() => startEdit(t)} className="p-1.5 text-text-secondary hover:text-primary transition-colors" title="Edit Transaction">
+                        <Edit2 size={14} />
+                      </button>
+                      <button onClick={() => handleDelete(t.id)} className="p-1.5 text-text-secondary hover:text-expense transition-colors" title="Delete Transaction">
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </td>
+                )}
               </tr>
             ))}
             {filteredTransactions.length === 0 && (
               <tr>
-                <td colSpan={6} className="py-12 text-center text-text-secondary">
+                <td colSpan={isViewOnly ? 5 : 6} className="py-12 text-center text-text-secondary">
                   <div className="flex flex-col items-center gap-2">
                     <FileText size={32} className="opacity-50" />
-                    <p>No transactions found. Add your first one.</p>
+                    <p>No transactions found. {!isViewOnly && 'Add your first one.'}</p>
                   </div>
                 </td>
               </tr>
