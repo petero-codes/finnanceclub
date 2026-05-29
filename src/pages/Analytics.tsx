@@ -48,14 +48,22 @@ export default function Analytics() {
   }
   const barData = last6Months.map(m => monthlyDataMap[m] || { name: m, income: 0, expense: 0 });
 
-  // 3. Cash Flow Trend
-  // Mock trend data
+  // 3. Dynamic Cash Flow Trend
+  const today = new Date();
+  const getBalanceAtDate = (dateLimit: Date) => {
+    return transactions
+      .filter(t => new Date(t.date) <= dateLimit)
+      .reduce((sum, t) => sum + (t.type === 'income' ? t.amount : -t.amount), 0);
+  };
+  const currentBalance = transactions
+    .reduce((sum, t) => sum + (t.type === 'income' ? t.amount : -t.amount), 0);
+
   const cashFlowData = [
-    { name: 'Week 1', balance: 5000 },
-    { name: 'Week 2', balance: 8000 },
-    { name: 'Week 3', balance: 6000 },
-    { name: 'Week 4', balance: 9000 },
-    { name: 'Week 5', balance: 12000 },
+    { name: 'Wk -4', balance: getBalanceAtDate(new Date(today.getTime() - 4 * 7 * 24 * 60 * 60 * 1000)) },
+    { name: 'Wk -3', balance: getBalanceAtDate(new Date(today.getTime() - 3 * 7 * 24 * 60 * 60 * 1000)) },
+    { name: 'Wk -2', balance: getBalanceAtDate(new Date(today.getTime() - 2 * 7 * 24 * 60 * 60 * 1000)) },
+    { name: 'Wk -1', balance: getBalanceAtDate(new Date(today.getTime() - 1 * 7 * 24 * 60 * 60 * 1000)) },
+    { name: 'Current', balance: currentBalance },
   ];
 
   // 4. Top Expense Categories

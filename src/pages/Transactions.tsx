@@ -24,11 +24,13 @@ export default function Transactions() {
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [rateLimited, setRateLimited] = useState(false);
 
-  const filteredTransactions = transactions.filter(t => {
-    const matchesSearch = t.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = typeFilter === 'all' || t.type === typeFilter;
-    return matchesSearch && matchesType;
-  });
+  const filteredTransactions = transactions
+    .filter(t => {
+      const matchesSearch = t.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesType = typeFilter === 'all' || t.type === typeFilter;
+      return matchesSearch && matchesType;
+    })
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const handleDelete = (id: string) => {
     if (window.confirm("Are you sure you want to delete this transaction?")) {

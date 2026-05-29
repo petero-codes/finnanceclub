@@ -65,16 +65,20 @@ export default function Dashboard() {
   }
   const barData = last6Months.map(m => monthlyDataMap[m] || { name: m, income: 0, expense: 0 });
 
-  // Cash Flow (Last 4 weeks)
-  const fourWeeksAgo = subWeeks(new Date(), 4);
-  const recentTransactions = transactions.filter(t => isAfter(new Date(t.date), fourWeeksAgo));
-  // Group by week - simplified for now
+  // Dynamic Cash Flow (Last 4 weeks)
+  const today = new Date();
+  const getBalanceAtDate = (dateLimit: Date) => {
+    return transactions
+      .filter(t => new Date(t.date) <= dateLimit)
+      .reduce((sum, t) => sum + (t.type === 'income' ? t.amount : -t.amount), 0);
+  };
+
   const cashFlowData = [
-    { name: 'Week 1', balance: currentBalance - 5000 },
-    { name: 'Week 2', balance: currentBalance - 3000 },
-    { name: 'Week 3', balance: currentBalance - 1000 },
-    { name: 'Week 4', balance: currentBalance },
-  ]; // Using mock progression since we need running balance
+    { name: 'Wk -3', balance: getBalanceAtDate(subWeeks(today, 3)) },
+    { name: 'Wk -2', balance: getBalanceAtDate(subWeeks(today, 2)) },
+    { name: 'Wk -1', balance: getBalanceAtDate(subWeeks(today, 1)) },
+    { name: 'Current', balance: currentBalance },
+  ];
 
   return (
     <div className="flex flex-col gap-6 animate-fade-in">
@@ -240,7 +244,7 @@ export default function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {transactions.slice(0, 5).map((t) => (
+              {[...transactions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5).map((t) => (
                 <tr key={t.id} className="border-b border-border-light dark:border-border-dark last:border-0 hover:bg-white/10 dark:hover:bg-white/5 transition-colors">
                   <td className="py-3 flex items-center gap-2 text-text-primary dark:text-white font-medium">
                     <FileText size={16} className="text-text-tertiary" />
