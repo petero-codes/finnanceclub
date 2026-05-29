@@ -53,7 +53,7 @@ export default function Layout() {
       <div className="absolute inset-0 glass-grid opacity-[0.85] pointer-events-none -z-10" />
 
       {/* Mobile Header */}
-      <div className="md:hidden flex items-center justify-between p-4 bg-white/60 dark:bg-card-dark/60 backdrop-blur-md border-b border-white/20 dark:border-white/10 absolute top-0 w-full z-20 h-[60px]">
+      <div className="md:hidden flex items-center justify-between p-4 bg-white/60 dark:bg-card-dark/60 backdrop-blur-md border-b border-white/20 dark:border-white/10 absolute top-0 w-full z-20 h-[60px] no-print">
         <div className="flex items-center gap-2.5">
           <div className="w-[32px] h-[32px] rounded-[10px] bg-[#3B82F6] flex items-center justify-center shadow-sm">
             <TrendingUp className="text-white" size={16} />
@@ -74,12 +74,12 @@ export default function Layout() {
 
       {/* Sidebar Overlay (Mobile) */}
       {mobileOpen && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden" onClick={closeMobileMenu}></div>
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden no-print" onClick={closeMobileMenu}></div>
       )}
 
       {/* Sidebar */}
       <aside 
-        className={`fixed md:static inset-y-0 left-0 z-40 w-[210px] bg-white/40 dark:bg-card-dark/40 backdrop-blur-xl border-r border-white/25 dark:border-white/10 flex flex-col transition-transform duration-300 ease-in-out ${
+        className={`no-print fixed md:static inset-y-0 left-0 z-40 w-[210px] bg-white/40 dark:bg-card-dark/40 backdrop-blur-xl border-r border-white/25 dark:border-white/10 flex flex-col transition-transform duration-300 ease-in-out ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
       >
