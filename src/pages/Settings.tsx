@@ -96,6 +96,8 @@ export default function Settings() {
                 <option value={4}>April</option>
                 <option value={7}>July</option>
                 <option value={10}>October</option>
+                <option value={5}>May</option>
+                <option value={6}>June</option>
               </select>
             </div>
           </div>
