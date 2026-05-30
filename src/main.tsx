@@ -1,5 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { registerSW } from 'virtual:pwa-register'
+registerSW({immediate: true})
 
 // Polyfill window.matchMedia and listener methods for automated/headless browser compatibility
 if (typeof window !== 'undefined') {
