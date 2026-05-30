@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { registerSW } from 'virtual:pwa-register'
@@ -9,7 +10,7 @@ if (typeof window !== 'undefined') {
   window.addEventListener('contextmenu', (e) => e.preventDefault());
 
   if (!window.matchMedia) {
-    window.matchMedia = (query) => ({
+    window.matchMedia = (query: string) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -18,7 +19,7 @@ if (typeof window !== 'undefined') {
       addEventListener: () => {},
       removeEventListener: () => {},
       dispatchEvent: () => false,
-    } as any);
+    } as MediaQueryList);
   } else {
     const originalMatchMedia = window.matchMedia;
     window.matchMedia = (query) => {
